@@ -1,7 +1,7 @@
 {
-  "name": "frontend_l4_chat_project",
+  "name": "ultimate-slack",
   "version": "0.0.1",
-  "description": "",
+  "description": "Ultimate Slack",
   "main": "dist/index.js",
   "bin": {
     "hexlet": "dist/bin/hexlet.js"
@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:hexlet/frontend_l4_chat_project.git"
+    "url": "https://github.com/amd-9/project-lvl4-s415.git"
   },
-  "author": "Kirill Mokevnin",
+  "author": "Anton Samoshin",
   "license": "ISC",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/amd-9/project-lvl4-s415/issues"
   },
   "homepage": "",
   "dependencies": {
