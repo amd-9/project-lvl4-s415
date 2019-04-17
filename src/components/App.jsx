@@ -4,8 +4,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import ChannelList from './ChannelList';
+import MessageList from './MessageList';
 import NewMessageForm from './NewMessageForm';
 import reducers from '../reducers';
+import { updateMessages } from '../actions';
 
 const store = createStore(
   reducers,
@@ -14,7 +16,12 @@ const store = createStore(
   ),
 );
 
-const app = ({ channels, currentChannelId }) => {
+const app = ({ channels, messages, currentChannelId }) => {
+  console.log('State state is');
+  console.log(store.getState());
+
+  store.dispatch(updateMessages(messages));
+
   render((
     <Provider store={store}>
       <div className="row">
@@ -23,7 +30,7 @@ const app = ({ channels, currentChannelId }) => {
         </div>
         <div className="col-md-10">
           <div className="row">
-            Hello chat messages!
+            <MessageList />
           </div>
           <div className="row">
             <NewMessageForm />

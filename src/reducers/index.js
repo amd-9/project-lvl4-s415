@@ -8,11 +8,14 @@ const messages = handleActions({
     console.log(state);
     console.log(payload);
 
-    return {
-
-    };
+    return [...state, payload];
   },
-}, { text: '' });
+  [actions.updateMessages](state, { payload }) {
+    console.log('Updating!');
+    console.log(payload);
+    return [...payload];
+  },
+}, []);
 
 
 export default combineReducers({
