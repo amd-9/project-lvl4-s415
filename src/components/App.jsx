@@ -29,6 +29,7 @@ const store = createStore(
   reducers,
   compose(
     applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() || compose,
   ),
 );
 
@@ -80,7 +81,7 @@ const app = ({ channels, messages, currentChannelId }) => {
   render((
     <Provider store={store}>
       <UserNameContext.Provider value={userName}>
-        <div className="row">
+        <div className="row mb-3">
           <div className="col-md-12">
             {`Logged as: ${userName}`}
           </div>
