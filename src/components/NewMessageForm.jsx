@@ -2,41 +2,50 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import * as actions from '../actions';
+import UserNameContext from '../context';
 
 const mapStateToProps = (state) => {
-  const props = {
-    text: state.text,
+  const { channelsUIState: { currentChannelId } } = state;
+  return {
+    currentChannelId,
   };
-  return props;
 };
 
 const actionCreators = {
   addMessage: actions.addMessage,
 };
 
+@connect(mapStateToProps, actionCreators)
 class NewMessageForm extends React.Component {
-  handleSubmit = (values) => {
-    const { addMessage, reset } = this.props;
-    const message = { ...values };
-    addMessage({ message });
+  static contextType = UserNameContext;
+
+  addMessage = async (values) => {
+    const { currentChannelId, addMessage, reset } = this.props;
+    const message = {
+      ...values,
+      name: this.context,
+      date: new Date(),
+    };
+    await addMessage(currentChannelId, message);
     reset();
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, pristine, submitting } = this.props;
+
     return (
-      <form className="formcomposene" onSubmit={handleSubmit(this.handleSubmit)}>
-        <div className="forcomposeup-mx-3">
-          <Field name="text" required component="input" type="text" />
+      <form onSubmit={handleSubmit(this.addMessage)}>
+        <div className="input-group">
+          <Field disabled={submitting} name="text" placeholder="Type your message here" className="form-control" required component="input" type="text" />
+          <span className="input-group-append">
+            <input disabled={pristine || submitting} type="submit" className="btn btn-primary" value="Send" />
+          </span>
         </div>
-        <input type="submit" className="btn btn-primary btn-sm" value="Send" />
       </form>
     );
   }
 }
 
-const ConnectedNewMessageForm = connect(mapStateToProps, actionCreators)(NewMessageForm);
-
 export default reduxForm({
   form: 'newMessage',
-})(ConnectedNewMessageForm);
+})(NewMessageForm);

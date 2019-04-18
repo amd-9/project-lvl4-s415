@@ -4,21 +4,38 @@ import { reducer as formReducer } from 'redux-form';
 import * as actions from '../actions';
 
 const messages = handleActions({
-  [actions.addMessageSuccess](state, { payload }) {
-    console.log(state);
-    console.log(payload);
-
-    return [...state, payload];
-  },
   [actions.updateMessages](state, { payload }) {
-    console.log('Updating!');
-    console.log(payload);
     return [...payload];
+  },
+  [actions.newMessage](state, { payload }) {
+    const { data: { attributes } } = payload;
+    return [...state, attributes];
   },
 }, []);
 
 
+const channelsUIState = handleActions({
+  [actions.changeChannel](state, { payload }) {
+    return { ...state, currentChannelId: payload };
+  },
+}, {});
+
+const channels = handleActions({
+  [actions.updateChannels](state, { payload }) {
+    return [...payload];
+  },
+}, []);
+
+const chatUIState = handleActions({
+  [actions.chatConnected](state) {
+    return { ...state, connected: true };
+  },
+}, { connected: false });
+
 export default combineReducers({
+  channels,
   messages,
+  channelsUIState,
+  chatUIState,
   form: formReducer,
 });

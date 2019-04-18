@@ -1,5 +1,7 @@
+const apiPrefix = 'api/v1';
+
 export default {
-  channelMessagesPath: channelId => `/channels/${channelId}/messages`,
-  channelsPath: () => '/channels',
-  channelPath: id => `/channels/${id}`,
+  channelMessagesPath: channelId => `/${apiPrefix}/channels/${channelId}/messages`,
+  channelsPath: () => `/${apiPrefix}/channels`,
+  channelPath: id => `/${apiPrefix}/channels/${id}`,
 };

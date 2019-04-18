@@ -2,21 +2,27 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
-  const { messages } = state;
-  return { messages };
+  const { messages, channelsUIState: { currentChannelId } } = state;
+  const channelMessages = messages.filter(message => message.channelId === currentChannelId);
+
+  return { channelMessages, currentChannelId };
 };
 
-const MessageList = (props) => {
-  const { messages } = props;
+@connect(mapStateToProps)
+class MessageList extends React.Component {
+  render() {
+    const { channelMessages } = this.props;
 
-  return (
-    <div>
-      {messages.map(message => (
-        <div key={message.id}>{message.text}</div>
-      ))}
-    </div>
-  );
-};
+    return (
+      <div className="card mb-2">
+        <div className="card-body">
+          {channelMessages.map(message => (
+            <div key={message.id}>{`[${message.date}] ${message.name}: ${message.text}`}</div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+}
 
-
-export default connect(mapStateToProps, null)(MessageList);
+export default MessageList;

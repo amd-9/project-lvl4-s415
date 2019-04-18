@@ -7,8 +7,6 @@ import app from './components/App';
 // import cookies from 'js-cookie';
 // import io from 'socket.io-client';
 
-console.log(gon);
-
 app(gon);
 
 if (process.env.NODE_ENV !== 'production') {
