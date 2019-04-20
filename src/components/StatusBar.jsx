@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { Row, Col } from 'react-bootstrap';
 import cn from 'classnames';
+import connect from '../connect';
 
 const mapStateToProps = (state) => {
   const { chatUIState } = state;
@@ -19,13 +20,13 @@ class StatusBar extends React.Component {
     });
 
     return (
-      <div className="row mb-3">
-        <div className="col-md-12">
+      <Row className="mb-3">
+        <Col md={12}>
           <span className={alertClasses}>
             { connected ? 'Connected' : 'Disconnected' }
           </span>
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

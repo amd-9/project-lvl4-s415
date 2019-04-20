@@ -1,8 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import * as actions from '../actions';
 import UserNameContext from '../context';
+import connect from '../connect';
 
 const mapStateToProps = (state) => {
   const { channelsUIState: { currentChannelId } } = state;
@@ -11,11 +10,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const actionCreators = {
-  addMessage: actions.addMessage,
-};
-
-@connect(mapStateToProps, actionCreators)
+@connect(mapStateToProps)
+@reduxForm({
+  form: 'newMessage',
+})
 class NewMessageForm extends React.Component {
   static contextType = UserNameContext;
 
@@ -46,6 +44,4 @@ class NewMessageForm extends React.Component {
   }
 }
 
-export default reduxForm({
-  form: 'newMessage',
-})(NewMessageForm);
+export default NewMessageForm;

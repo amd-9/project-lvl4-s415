@@ -1,5 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { Card } from 'react-bootstrap';
+import { format } from 'date-fns';
+import connect from '../connect';
 
 const mapStateToProps = (state) => {
   const { messages, channelsUIState: { currentChannelId } } = state;
@@ -14,13 +16,13 @@ class MessageList extends React.Component {
     const { channelMessages } = this.props;
 
     return (
-      <div className="card mb-2">
-        <div className="card-body">
+      <Card className="mb-2">
+        <Card.Body>
           {channelMessages.map(message => (
-            <div key={message.id}>{`[${message.date}] ${message.name}: ${message.text}`}</div>
+            <div key={message.id}>{`[${format(message.date, 'DD-MM-YYYY HH:mm')}] ${message.name}: ${message.text}`}</div>
           ))}
-        </div>
-      </div>
+        </Card.Body>
+      </Card>
     );
   }
 }

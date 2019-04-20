@@ -1,20 +1,35 @@
 import React from 'react';
 import _ from 'lodash';
-import cn from 'classnames';
-import { connect } from 'react-redux';
-import * as actions from '../actions';
+import {
+  Button,
+  Card,
+  ListGroup,
+  Row,
+  Col,
+} from 'react-bootstrap';
+import connect from '../connect';
+import ModalDeleteChannel from './ModalDeleteChannel';
+import ModalEditChannel from './ModalEditChannel';
 
 const mapStateToProps = (state) => {
-  const { channels, channelsUIState } = state;
-  return { channels, channelsUIState };
+  const { channels: { byId, allIds }, channelsUIState } = state;
+  return { channels: allIds.map(id => byId[id]), channelsUIState };
 };
 
-const actionCreators = {
-  changeChannel: actions.changeChannel,
-};
-
-@connect(mapStateToProps, actionCreators)
+@connect(mapStateToProps)
 class ChannelList extends React.Component {
+  handleOpenDeleteModal = channelId => (e) => {
+    e.preventDefault();
+    const { openChannelDeleteModal } = this.props;
+    openChannelDeleteModal(channelId);
+  };
+
+  handleOpenEditModal = (editActionType, editedChannelId, name = '') => (e) => {
+    e.preventDefault();
+    const { openChannelEditModal } = this.props;
+    openChannelEditModal({ editActionType, editedChannelId, name });
+  };
+
   handleChannelChange = channelId => (e) => {
     e.preventDefault();
     const { changeChannel } = this.props;
@@ -24,19 +39,39 @@ class ChannelList extends React.Component {
   render() {
     const { channels, channelsUIState: { currentChannelId } } = this.props;
 
-    const channelClasses = channelId => cn({
-      btn: true,
-      'btn-light': currentChannelId !== channelId,
-      'btn-primary': currentChannelId === channelId,
-    });
-
     return (
-      <div className="btn-group-vertical">
-        {channels.map(({ id, name }) => (
-          <button type="button" key={_.uniqueId()} className={channelClasses(id)} onClick={this.handleChannelChange(id)}>
-            {name}
-          </button>))}
-      </div>
+      <>
+        <Card>
+          <ListGroup variant="flush">
+            {channels.map(({ id, name, removable }) => (
+              <ListGroup.Item key={_.uniqueId()}>
+                <Row>
+                  <Col md={12}>
+                    <Button variant={currentChannelId === id ? 'primary' : 'light'} onClick={this.handleChannelChange(id)}>{name}</Button>
+                    { removable && (
+                      <Row className="mt-2">
+                        <Col md={12}>
+                          <Button variant="light" className="ml-2" onClick={this.handleOpenEditModal('edit', id, name)}>
+                            <span>Edit</span>
+                          </Button>
+                          <Button variant="light" className="ml-2" onClick={this.handleOpenDeleteModal(id)}>
+                            <span>&times;</span>
+                          </Button>
+                        </Col>
+                      </Row>)
+                   }
+                  </Col>
+                </Row>
+              </ListGroup.Item>))}
+          </ListGroup>
+          <Card.Body>
+            <Button variant="primary" onClick={this.handleOpenEditModal('add')}>Add</Button>
+          </Card.Body>
+        </Card>
+        <ModalDeleteChannel />
+        <ModalEditChannel />
+
+       </>
     );
   }
 }

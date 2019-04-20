@@ -7,9 +7,7 @@ import { Provider } from 'react-redux';
 import Cookies from 'js-cookie';
 import faker from 'faker';
 import io from 'socket.io-client';
-import ChannelList from './ChannelList';
-import MessageList from './MessageList';
-import NewMessageForm from './NewMessageForm';
+import Chat from './Chat';
 import reducers from '../reducers';
 import {
   chatConnected,
@@ -22,8 +20,6 @@ import {
   removeChannel,
 } from '../actions';
 import UserNameContext from '../context';
-import StatusBar from './StatusBar';
-
 
 const store = createStore(
   reducers,
@@ -81,33 +77,7 @@ const app = ({ channels, messages, currentChannelId }) => {
   render((
     <Provider store={store}>
       <UserNameContext.Provider value={userName}>
-        <div className="row mb-3">
-          <div className="col-md-12">
-            {`Logged as: ${userName}`}
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-2">
-            <ChannelList />
-          </div>
-          <div className="col-md-10">
-            <div className="row">
-              <div className="col-md-12">
-                <StatusBar />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <MessageList />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <NewMessageForm />
-              </div>
-            </div>
-          </div>
-        </div>
+        <Chat />
       </UserNameContext.Provider>
     </Provider>
   ),
