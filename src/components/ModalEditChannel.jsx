@@ -5,25 +5,25 @@ import connect from '../connect';
 const mapStateToProps = (state) => {
   const {
     channelsUIState: {
-      isEditModalOpen,
+      isModalOpened,
       newChannelName,
-      editActionType,
-      editedChannelId,
+      openedModalType,
+      selectedChannelId,
     },
   } = state;
   return {
-    isEditModalOpen,
+    isEditModalOpen: isModalOpened && openedModalType !== 'delete',
     newChannelName,
-    editActionType,
-    editedChannelId,
+    openedModalType,
+    selectedChannelId,
   };
 };
 
 @connect(mapStateToProps)
 class ModalEditChannel extends React.Component {
   handleCloseModal = () => {
-    const { closeChannelEditModal } = this.props;
-    closeChannelEditModal();
+    const { closeChannelModal } = this.props;
+    closeChannelModal();
   };
 
   handleChannelNameChange = (e) => {
@@ -36,10 +36,10 @@ class ModalEditChannel extends React.Component {
       addChannel,
       editChannel,
       newChannelName,
-      editActionType,
+      openedModalType,
     } = this.props;
 
-    if (editActionType === 'add') {
+    if (openedModalType === 'add') {
       addChannel(newChannelName);
     } else {
       editChannel(channelId, newChannelName);
@@ -51,20 +51,20 @@ class ModalEditChannel extends React.Component {
     const {
       isEditModalOpen,
       newChannelName,
-      editActionType,
-      editedChannelId,
+      openedModalType,
+      selectedChannelId,
     } = this.props;
 
     return (
       <Modal show={isEditModalOpen} onHide={this.handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{ editActionType === 'add' ? 'Add channel' : 'Edit channel' }</Modal.Title>
+          <Modal.Title>{ openedModalType === 'add' ? 'Add channel' : 'Edit channel' }</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input type="text" className="form-control" value={newChannelName} onChange={this.handleChannelNameChange} />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={this.handleConfirmEdit(editedChannelId)}>
+          <Button variant="primary" onClick={this.handleConfirmEdit(selectedChannelId)}>
            Confirm
           </Button>
         </Modal.Footer>

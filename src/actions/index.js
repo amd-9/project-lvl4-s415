@@ -12,6 +12,9 @@ export const closeChannelDeleteModal = createAction('CHANNEL_DETELE_MODEL_CLOSE'
 export const openChannelEditModal = createAction('CHANNEL_EDIT_MODEL_OPEN');
 export const closeChannelEditModal = createAction('CHANNEL_EDIT_MODEL_CLOSE');
 
+export const openChannelModal = createAction('CHANNEL_MODAL_OPEN');
+export const closeChannelModal = createAction('CHANNEL_MODAL_CLOSE');
+
 export const newMessage = createAction('MESSAGE_NEW');
 export const newChannel = createAction('CHANNEL_NEW');
 export const removeChannel = createAction('CHANNEL_REMOVE');

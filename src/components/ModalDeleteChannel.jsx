@@ -4,16 +4,16 @@ import connect from '../connect';
 
 
 const mapStateToProps = (state) => {
-  const { channelsUIState: { isDeleteModalOpen, channelIdToDelete } } = state;
-  return { isDeleteModalOpen, channelIdToDelete };
+  const { channelsUIState: { isModalOpened, openedModalType, selectedChannelId } } = state;
+  return { isDeleteModalOpen: isModalOpened && openedModalType === 'delete', selectedChannelId };
 };
 
 
 @connect(mapStateToProps)
 class ModalDeleteChannel extends React.Component {
   handleCloseModal = () => {
-    const { closeChannelDeleteModal } = this.props;
-    closeChannelDeleteModal();
+    const { closeChannelModal } = this.props;
+    closeChannelModal();
   };
 
   handleConfirmDelete = channelId => () => {
@@ -23,7 +23,7 @@ class ModalDeleteChannel extends React.Component {
 
 
   render() {
-    const { isDeleteModalOpen, channelIdToDelete } = this.props;
+    const { isDeleteModalOpen, selectedChannelId } = this.props;
 
     return (
       <Modal show={isDeleteModalOpen} onHide={this.handleCloseModal}>
@@ -32,7 +32,7 @@ class ModalDeleteChannel extends React.Component {
         </Modal.Header>
         <Modal.Body>Are you sure?</Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={this.handleConfirmDelete(channelIdToDelete)}>
+          <Button variant="primary" onClick={this.handleConfirmDelete(selectedChannelId)}>
            Confirm
           </Button>
         </Modal.Footer>

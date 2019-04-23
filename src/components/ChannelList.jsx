@@ -20,14 +20,23 @@ const mapStateToProps = (state) => {
 class ChannelList extends React.Component {
   handleOpenDeleteModal = channelId => (e) => {
     e.preventDefault();
-    const { openChannelDeleteModal } = this.props;
-    openChannelDeleteModal(channelId);
+    const { openChannelModal } = this.props;
+    const modalParameters = {
+      openedModalType: 'delete',
+      selectedChannelId: channelId,
+    };
+    openChannelModal(modalParameters);
   };
 
-  handleOpenEditModal = (editActionType, editedChannelId, name = '') => (e) => {
+  handleOpenEditModal = (openedModalType, selectedChannelId, newChannelName = '') => (e) => {
     e.preventDefault();
-    const { openChannelEditModal } = this.props;
-    openChannelEditModal({ editActionType, editedChannelId, name });
+    const { openChannelModal } = this.props;
+    const modalParameters = {
+      openedModalType,
+      selectedChannelId,
+      newChannelName,
+    };
+    openChannelModal(modalParameters);
   };
 
   handleChannelChange = channelId => (e) => {

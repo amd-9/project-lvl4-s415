@@ -13,6 +13,10 @@ const messages = handleActions({
     const { data: { attributes } } = payload;
     return [...state, attributes];
   },
+  [actions.removeChannel](state, { payload }) {
+    const { data: { id } } = payload;
+    return state.filter(message => message.channelId !== id);
+  },
 }, []);
 
 
@@ -20,33 +24,37 @@ const channelsUIState = handleActions({
   [actions.changeChannel](state, { payload }) {
     return { ...state, currentChannelId: payload };
   },
-  [actions.openChannelDeleteModal](state, { payload }) {
-    return { ...state, isDeleteModalOpen: true, channelIdToDelete: payload };
+  [actions.openChannelModal](state, { payload }) {
+    const {
+      openedModalType,
+      selectedChannelId,
+      newChannelName,
+    } = payload;
+
+    const newState = { ...state, openedModalType, isModalOpened: true };
+
+    switch (openedModalType) {
+      case 'add':
+        return { ...newState, newChannelName };
+      case 'edit':
+        return { ...newState, selectedChannelId, newChannelName };
+      case 'delete':
+        return { ...newState, selectedChannelId };
+      default:
+        return state;
+    }
   },
-  [actions.closeChannelDeleteModal](state) {
-    return { ...state, isDeleteModalOpen: false };
-  },
-  [actions.openChannelEditModal](state, { payload }) {
-    const { editActionType, editedChannelId, name } = payload;
-    return {
-      ...state,
-      isEditModalOpen: true,
-      editActionType,
-      editedChannelId,
-      newChannelName: name,
-    };
-  },
-  [actions.closeChannelEditModal](state) {
-    return { ...state, isEditModalOpen: false, newChannelName: '' };
+  [actions.closeChannelModal](state) {
+    return { ...state, isModalOpened: false };
   },
   [actions.addChannelRequest](state) {
-    return { ...state, isEditModalOpen: false };
+    return { ...state, isModalOpened: false };
   },
   [actions.deleteChannelRequest](state) {
-    return { ...state, isDeleteModalOpen: false };
+    return { ...state, isModalOpened: false };
   },
   [actions.editChannelRequest](state) {
-    return { ...state, isEditModalOpen: false };
+    return { ...state, isModalOpened: false };
   },
   [actions.newChannelNameChange](state, { payload }) {
     return { ...state, newChannelName: payload };
