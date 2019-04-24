@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createAction } from 'redux-actions';
+import { SubmissionError } from 'redux-form';
 import routes from '../routes';
 
 export const chatConnected = createAction('CHAT_CONNECTED');
@@ -53,7 +54,7 @@ export const addMessage = (channelId, message) => async (dispatch) => {
     dispatch(addMessageSuccess({ data: response.data }));
   } catch (e) {
     dispatch(addMessageFailure());
-    throw e;
+    throw new SubmissionError({ _error: e.message });
   }
 };
 

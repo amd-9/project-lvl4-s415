@@ -1,5 +1,13 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import {
+  Row,
+  Col,
+  Alert,
+  Form,
+  InputGroup,
+  Button,
+} from 'react-bootstrap';
 import UserNameContext from '../context';
 import connect from '../connect';
 
@@ -29,17 +37,29 @@ class NewMessageForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, pristine, submitting } = this.props;
+    const {
+      handleSubmit,
+      pristine,
+      submitting,
+      error,
+    } = this.props;
 
     return (
-      <form onSubmit={handleSubmit(this.addMessage)}>
-        <div className="input-group">
+      <Form onSubmit={handleSubmit(this.addMessage)}>
+        <InputGroup>
           <Field disabled={submitting} name="text" placeholder="Type your message here" className="form-control" required component="input" type="text" />
-          <span className="input-group-append">
-            <input disabled={pristine || submitting} type="submit" className="btn btn-primary" value="Send" />
-          </span>
-        </div>
-      </form>
+          <InputGroup.Append>
+            <Button variant="primary" disabled={pristine || submitting} type="submit">
+              Send
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
+        <Row className="mt-2">
+          <Col md={12}>
+            { error && <Alert variant="danger">{error}</Alert>}
+          </Col>
+        </Row>
+      </Form>
     );
   }
 }
