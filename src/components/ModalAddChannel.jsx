@@ -18,7 +18,7 @@ const mapStateToProps = (state) => {
 };
 
 @connect(mapStateToProps)
-class ModalEditChannel extends React.Component {
+class ModalAddChannel extends React.Component {
   handleCloseModal = () => {
     const { closeChannelModal } = this.props;
     closeChannelModal();
@@ -29,15 +29,15 @@ class ModalEditChannel extends React.Component {
     newChannelNameChange(e.target.value);
   }
 
-  handleConfirmEdit = channelId => () => {
+  handleConfirmAdd = () => {
     const {
-      editChannel,
+      addChannel,
       newChannelName,
       closeChannelModal,
     } = this.props;
 
     closeChannelModal();
-    editChannel(channelId, newChannelName);
+    addChannel(newChannelName);
   };
 
 
@@ -45,19 +45,18 @@ class ModalEditChannel extends React.Component {
     const {
       isModalOpened,
       newChannelName,
-      selectedChannelId,
     } = this.props;
 
     return (
       <Modal show={isModalOpened} onHide={this.handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit channel</Modal.Title>
+          <Modal.Title>Add channel</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input type="text" className="form-control" value={newChannelName} onChange={this.handleChannelNameChange} />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={this.handleConfirmEdit(selectedChannelId)}>
+          <Button variant="primary" onClick={this.handleConfirmAdd}>
            Confirm
           </Button>
         </Modal.Footer>
@@ -66,4 +65,4 @@ class ModalEditChannel extends React.Component {
   }
 }
 
-export default ModalEditChannel;
+export default ModalAddChannel;

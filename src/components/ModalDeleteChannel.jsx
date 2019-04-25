@@ -4,8 +4,8 @@ import connect from '../connect';
 
 
 const mapStateToProps = (state) => {
-  const { channelsUIState: { isModalOpened, openedModalType, selectedChannelId } } = state;
-  return { isDeleteModalOpen: isModalOpened && openedModalType === 'delete', selectedChannelId };
+  const { channelsUIState: { isModalOpened, selectedChannelId } } = state;
+  return { isModalOpened, selectedChannelId };
 };
 
 
@@ -17,16 +17,17 @@ class ModalDeleteChannel extends React.Component {
   };
 
   handleConfirmDelete = channelId => () => {
-    const { deleteChannel } = this.props;
+    const { deleteChannel, closeChannelModal } = this.props;
+    closeChannelModal();
     deleteChannel(channelId);
   };
 
 
   render() {
-    const { isDeleteModalOpen, selectedChannelId } = this.props;
+    const { isModalOpened, selectedChannelId } = this.props;
 
     return (
-      <Modal show={isDeleteModalOpen} onHide={this.handleCloseModal}>
+      <Modal show={isModalOpened} onHide={this.handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Delete channel</Modal.Title>
         </Modal.Header>

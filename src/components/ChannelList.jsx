@@ -9,26 +9,20 @@ import {
 } from 'react-bootstrap';
 import connect from '../connect';
 import ModalDeleteChannel from './ModalDeleteChannel';
+import ModalAddChannel from './ModalAddChannel';
 import ModalEditChannel from './ModalEditChannel';
 
 const mapStateToProps = (state) => {
-  const { channels: { byId, allIds }, channelsUIState } = state;
-  return { channels: allIds.map(id => byId[id]), channelsUIState };
+  const {
+    channels: { byId, allIds },
+    channelsUIState: { currentChannelId, openedModalType },
+  } = state;
+  return { channels: allIds.map(id => byId[id]), currentChannelId, openedModalType };
 };
 
 @connect(mapStateToProps)
 class ChannelList extends React.Component {
-  handleOpenDeleteModal = channelId => (e) => {
-    e.preventDefault();
-    const { openChannelModal } = this.props;
-    const modalParameters = {
-      openedModalType: 'delete',
-      selectedChannelId: channelId,
-    };
-    openChannelModal(modalParameters);
-  };
-
-  handleOpenEditModal = (openedModalType, selectedChannelId, newChannelName = '') => (e) => {
+  handleOpenModal = (openedModalType, selectedChannelId, newChannelName = '') => (e) => {
     e.preventDefault();
     const { openChannelModal } = this.props;
     const modalParameters = {
@@ -37,7 +31,7 @@ class ChannelList extends React.Component {
       newChannelName,
     };
     openChannelModal(modalParameters);
-  };
+  }
 
   handleChannelChange = channelId => (e) => {
     e.preventDefault();
@@ -45,8 +39,24 @@ class ChannelList extends React.Component {
     changeChannel(channelId);
   };
 
+  renderModal() {
+    const { openedModalType } = this.props;
+
+    if (!openedModalType) {
+      return (null);
+    }
+
+    const modalRenderActions = {
+      add: () => <ModalAddChannel />,
+      edit: () => <ModalEditChannel />,
+      delete: () => <ModalDeleteChannel />,
+    };
+
+    return modalRenderActions[openedModalType]();
+  }
+
   render() {
-    const { channels, channelsUIState: { currentChannelId } } = this.props;
+    const { channels, currentChannelId } = this.props;
 
     return (
       <>
@@ -60,10 +70,10 @@ class ChannelList extends React.Component {
                     { removable && (
                       <Row className="mt-2">
                         <Col md={12}>
-                          <Button variant="light" className="ml-2" onClick={this.handleOpenEditModal('edit', id, name)}>
+                          <Button variant="light" className="ml-2" onClick={this.handleOpenModal('edit', id, name)}>
                             <span>Edit</span>
                           </Button>
-                          <Button variant="light" className="ml-2" onClick={this.handleOpenDeleteModal(id)}>
+                          <Button variant="light" className="ml-2" onClick={this.handleOpenModal('delete', id)}>
                             <span>&times;</span>
                           </Button>
                         </Col>
@@ -74,11 +84,10 @@ class ChannelList extends React.Component {
               </ListGroup.Item>))}
           </ListGroup>
           <Card.Body>
-            <Button variant="primary" onClick={this.handleOpenEditModal('add')}>Add</Button>
+            <Button variant="primary" onClick={this.handleOpenModal('add')}>Add</Button>
           </Card.Body>
         </Card>
-        <ModalDeleteChannel />
-        <ModalEditChannel />
+        { this.renderModal() }
 
        </>
     );

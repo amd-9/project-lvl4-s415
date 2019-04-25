@@ -25,35 +25,13 @@ const channelsUIState = handleActions({
     return { ...state, currentChannelId: payload };
   },
   [actions.openChannelModal](state, { payload }) {
-    const {
-      openedModalType,
-      selectedChannelId,
-      newChannelName,
-    } = payload;
-
-    const newState = { ...state, openedModalType, isModalOpened: true };
-
-    switch (openedModalType) {
-      case 'add':
-        return { ...newState, newChannelName };
-      case 'edit':
-        return { ...newState, selectedChannelId, newChannelName };
-      case 'delete':
-        return { ...newState, selectedChannelId };
-      default:
-        return state;
-    }
+    return {
+      ...state,
+      ...payload,
+      isModalOpened: true,
+    };
   },
   [actions.closeChannelModal](state) {
-    return { ...state, isModalOpened: false };
-  },
-  [actions.addChannelRequest](state) {
-    return { ...state, isModalOpened: false };
-  },
-  [actions.deleteChannelRequest](state) {
-    return { ...state, isModalOpened: false };
-  },
-  [actions.editChannelRequest](state) {
     return { ...state, isModalOpened: false };
   },
   [actions.newChannelNameChange](state, { payload }) {
